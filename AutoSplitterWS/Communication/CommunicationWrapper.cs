@@ -32,44 +32,48 @@ public static class CommunicationWrapper {
 
     public static bool Connected => comm is { Connected: true };
     private static CommunicationAdapterJumpKing comm;
-    private static readonly object startLock = new();
+    private static readonly object commLock = new();
     private static bool isProcessExited = false;
 
     static CommunicationWrapper()
     {
         // Stop communicating thread when process is exiting
         AppDomain.CurrentDomain.ProcessExit += (sender, e) => {
-            lock (startLock) {isProcessExited = true;}
+            lock (commLock) {isProcessExited = true;}
             Stop();
         };
     }
 
     public static void Start()
     {
-        lock (startLock) {
+        lock (commLock) {
             if (isProcessExited) {
                 Debug.WriteLine("[Wrapper] Tried to start the communication adapter after process exited!");
                 return;
             }
-        }
-        if (comm != null) {
-            Debug.WriteLine("[Wrapper] Tried to start the communication adapter while already running!");
-            return;
-        }
+            if (comm != null) {
+                Debug.WriteLine("[Wrapper] Tried to start the communication adapter while already running!");
+                return;
+            }
 
-        comm = new CommunicationAdapterJumpKing();
-        TextConnectionState.SetState(ConnectionState.Connecting);
+            comm = new CommunicationAdapterJumpKing();
+            TextConnectionState.SetState(ConnectionState.Connecting);
+        }
     }
     public static void Stop()
     {
-        if (comm == null) {
-            Debug.WriteLine("[Wrapper] Tried to stop the communication adapter while not running!");
-            return;
-        }
+        lock (commLock)
+        {
+            if (comm == null)
+            {
+                Debug.WriteLine("[Wrapper] Tried to stop the communication adapter while not running!");
+                return;
+            }
 
-        comm.Dispose();
-        comm = null;
-        TextConnectionState.SetState(ConnectionState.Disconnected);
+            comm.Dispose();
+            comm = null;
+            TextConnectionState.SetState(ConnectionState.Disconnected);
+        }
     }
 
     public static void OnConnectionChanged(bool connected)
