@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- See UpdateManager.Updater.UpdaterInternal -->
 <updates>
-    <!-- See UpdateManager.Update.Parse() -->
+	<update version="1.0.1">
+		<files>
+			<file path="Components/LiveSplit.JumpKingWS.dll" status="Changed"/>
+		</files>
+		<changelog>
+			<change> Fix: LiveSplit crash when AutoSplitterSettings is missing from .lss file </change>
+		</changelog>
+	</update>
 	<update version="1.0.0">
-        <!-- See UpdateManager.FileChange -->
 		<files>
 			<file path="Components/LiveSplit.JumpKingWS.dll" status="Changed"/>
 		</files>
@@ -12,3 +17,6 @@
 		</changelog>
 	</update>
 </updates>
+<!-- See UpdateManager.Updater.UpdaterInternal -->
+    <!-- See UpdateManager.Update.Parse() -->
+        <!-- See UpdateManager.FileChange -->
