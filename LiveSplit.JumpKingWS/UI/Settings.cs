@@ -27,9 +27,12 @@ public partial class Settings : UserControl
     
     public static void LoadFromXml(XmlNode node)
     {
-        bool.TryParse(node[ISAUTOSTARTTIMER_NODENAME]?.InnerText, out isAutoStartTimer);
-		bool.TryParse(node[ISAUTORESETTIMER_NODENAME]?.InnerText, out isAutoResetTimer);
-		bool.TryParse(node[ISUNDOSPLIT_NODENAME]?.InnerText, out isUndoSplit);
+        if (node!=null)
+        {
+            bool.TryParse(node[ISAUTOSTARTTIMER_NODENAME]?.InnerText, out isAutoStartTimer);
+            bool.TryParse(node[ISAUTORESETTIMER_NODENAME]?.InnerText, out isAutoResetTimer);
+            bool.TryParse(node[ISUNDOSPLIT_NODENAME]?.InnerText, out isUndoSplit);
+        }
     }
     public static void SaveToXml(XmlDocument doc, XmlElement ele)
     {

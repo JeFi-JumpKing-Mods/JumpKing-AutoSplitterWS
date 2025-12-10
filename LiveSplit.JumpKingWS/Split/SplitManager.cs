@@ -46,6 +46,8 @@ public static class SplitManager
     public static void LoadFromXml(XmlNode splitsNode)
     {
         Clear();
+        if (splitsNode==null) return;
+        
         foreach (XmlNode node in splitsNode.SelectNodes(".//Split"))
         {
             try
